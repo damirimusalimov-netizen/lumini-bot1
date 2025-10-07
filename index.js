@@ -1,31 +1,28 @@
 /**
- * LuminiShop Telegram Bot
- * -----------------------
- * Этот бот:
- * 1. Показывает кнопку "Открыть каталог" при /start
- * 2. Открывает твой WebApp (сайт)
- * 3. Получает оформленные заказы и отправляет их админу
- *
- * Установка:
- * npm install node-telegram-bot-api
- *
- * Запуск:
- * node index.js
+ * LuminiShop Telegram Bot (Render-ready)
+ * --------------------------------------
+ * Работает на Render.com (бесплатно)
+ * Telegram бот + фиктивный сервер, чтобы Render не завершал процесс.
  */
 
 import TelegramBot from "node-telegram-bot-api";
+import express from "express"; // <--- добавлено для Render
 
-// ⬇️ ВСТАВЬ сюда свой токен бота (из @BotFather)
+// 🔑 Твой токен и ID
 const TOKEN = "8427147628:AAGnD6PwW_6olpGnAvQYvWeqhDGz8WkKSPI";
-
-// ⬇️ ВСТАВЬ сюда свой Telegram ID (узнать можно у @userinfobot)
 const ADMIN_ID = 1725752168;
 
 // 🌐 Ссылка на твой сайт (WebApp)
 const WEBAPP_URL = "https://luminiwebapp.netlify.app/shop.html";
 
-// Инициализация бота
+// ⚙️ Инициализация бота
 const bot = new TelegramBot(TOKEN, { polling: true });
+
+// 🟢 Express — фиктивный сервер, чтобы Render видел "порт"
+const app = express();
+const PORT = process.env.PORT || 3000;
+app.get("/", (req, res) => res.send("LuminiShop bot is alive 🚀"));
+app.listen(PORT, () => console.log(`Render port active on ${PORT}`));
 
 // Команда /start
 bot.onText(/\/start/, (msg) => {
@@ -47,7 +44,7 @@ bot.onText(/\/start/, (msg) => {
   });
 });
 
-// Обработка данных из WebApp
+// Обработка заказов из WebApp
 bot.on("message", (msg) => {
   if (msg.web_app_data) {
     const data = JSON.parse(msg.web_app_data.data);
@@ -67,3 +64,5 @@ bot.on("message", (msg) => {
     bot.sendMessage(ADMIN_ID, text);
   }
 });
+
+console.log("🤖 LuminiShop bot is running...");
