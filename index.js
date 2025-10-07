@@ -16,7 +16,7 @@ const ADMIN_ID = 1725752168;
 const WEBAPP_URL = "https://luminiwebapp.netlify.app/shop.html";
 
 // ⚙️ Инициализация бота
-const bot = new TelegramBot(TOKEN, { polling: true });
+const bot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
 
 // 🟢 Express — фиктивный сервер, чтобы Render видел "порт"
 const app = express();
@@ -66,3 +66,4 @@ bot.on("message", (msg) => {
 });
 
 console.log("🤖 LuminiShop bot is running...");
+
